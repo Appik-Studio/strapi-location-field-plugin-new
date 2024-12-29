@@ -25,7 +25,7 @@ export default function Input({
 	const [autocompletionRequestOptions, setAutocompletionRequestOptions] =
 		useState(null);
 	const [textValue, setTextValue] = useState(
-		"" || (value !== "null" ? JSON.parse(value).description : "")
+		"" || (value !== "null" ? value?.description : "")
 	);
 
   const { get } = useFetchClient();
