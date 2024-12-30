@@ -5,21 +5,10 @@ import Initializer from './components/Initializer';
 import PluginIcon from './components/PluginIcon';
 
 const name = pluginPkg.strapi.name;
-import he from './translations/he.json';
-import en from './translations/en.json';
 
 export default {
   register(app) {
-    app.addLocale({
-      name: 'Hebrew',
-      code: 'he',
-      translations: he,
-    });
-    app.addLocale({
-      name: 'English',
-      code: 'en',
-      translations: en,
-    });
+
     app.registerPlugin({
       id: pluginId,
       initializer: Initializer,
