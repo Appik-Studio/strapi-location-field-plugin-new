@@ -19,13 +19,29 @@ export default function Input({
 	error,
 	required,
 }) {
+	function safeJsonParse(input) {
+		try {
+			// Check if the input is already an object
+			if (typeof input === 'object' && input !== null) {
+				return input; // Already parsed, return as-is
+			}
+
+			// Attempt to parse the input as JSON
+			return JSON.parse(input);
+		} catch (error) {
+			// Return null or handle parsing error
+			console.error('Failed to parse JSON:', error);
+			return null;
+		}
+	}
+
 	const [apiKey, setApiKey] = useState(null);
 	const [fields, setFields] = useState(null);
 	const [loader, setLoader] = useState(null);
 	const [autocompletionRequestOptions, setAutocompletionRequestOptions] =
 		useState(null);
 	const [textValue, setTextValue] = useState(
-		"" || (value !== "null" ? value?.description : "")
+		"" || (value !== "null" ? safeJsonParse(value)?.description : "")
 	);
 
   const { get } = useFetchClient();
@@ -186,7 +202,7 @@ export default function Input({
 	const setCoordinates = (val, type) => {
 		let targetValue = null;
 		if (value !== "null") {
-			targetValue = JSON.parse(value);
+			targetValue = safeJsonParse(value);
 		}
 
 		if (type === "lat") {
@@ -203,21 +219,8 @@ export default function Input({
 			},
 		});
 	};
-	function safeJsonParse(input) {
-		try {
-			// Check if the input is already an object
-			if (typeof input === 'object' && input !== null) {
-				return input; // Already parsed, return as-is
-			}
 
-			// Attempt to parse the input as JSON
-			return JSON.parse(input);
-		} catch (error) {
-			// Return null or handle parsing error
-			console.error('Failed to parse JSON:', error);
-			return null;
-		}
-	}
+	console.log('LocationInput render - value:', value, 'parsed value:', safeJsonParse(value));
 
 	return (
 		<Flex direction="column" alignItems="start" gap={3}>
